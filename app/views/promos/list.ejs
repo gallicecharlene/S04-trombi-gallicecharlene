@@ -1,0 +1,11 @@
+<%- include('../partials/header.ejs') %>
+
+<h1>Liste des promos</h1>
+<ul class="cards">
+  <!-- Je boucle sur chacune de mes promos pour afficher mes liens -->
+  <% for(const promo of promos) { %>
+    <li class="card card--label"><a href="/promos/<%= promo.id %>"><%= promo.name %></a></li>
+  <% } %>
+</ul>
+
+<%- include('../partials/footer.ejs') %>
