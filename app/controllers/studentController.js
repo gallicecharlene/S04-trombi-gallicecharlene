@@ -1,17 +1,19 @@
-const students = require('../../data/students.json');
-const promos = require('../../data/promos.json');
+// const students = require('../../data/students.json');
+// const promos = require('../../data/promos.json');
+const client = require('../dbClient');
 
 const studentController = {
 
-  studentsList(req, res, next) {
-    const { id } = req.params;
+  async studentsList(req, res, next) {
+    const id = parseInt(req.params.id, 10);
 
-    const studentsPromoFound = students.filter((student) => student.promo === parseInt(id, 10));
-    const promoFound = promos.find((promo) => promo.id === Number(id));
-    if (studentsPromoFound && promoFound) {
+    const promoByid = await client.query(`SELECT * FROM "promo" WHERE id = ${id};`);
+    const studentsPromoFound = await client.query(`SELECT * FROM "student" WHERE promo_id = ${id};`);
+
+    if (studentsPromoFound.rows.length > 0 && promoByid.rows.length > 0) {
       res.render('students/studentsList', {
-        students: studentsPromoFound,
-        promo: promoFound,
+        students: studentsPromoFound.rows,
+        promo: promoByid.rows[0],
       });
     } else {
       next();

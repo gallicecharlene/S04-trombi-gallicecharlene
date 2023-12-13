@@ -158,6 +158,10 @@ form button:hover {
   color: #fff;
 }
 
+.promo-link {
+  color: #333;
+}
+
 @media (min-width: 600px) {
   .cards li {
       width: 33%;

@@ -1,31 +1,27 @@
-const promos = require('../../data/promos.json');
+// const promos = require('../../data/promos.json');
+const client = require('../dbClient');
 
 const promoController = {
   // Index s'occupera d'afficher la liste des promos
-  promosList(req, res) {
+  async promosList(req, res) {
+    const promos = await client.query('SELECT * FROM "promo" ORDER BY name;');
+
     // On passe à notre vue les données json de notre fichier promos.json
     res.render('promos/list', {
-      promos,
+      promos: promos.rows,
     });
   },
 
   // Affiche le détail d'une promo...
-  promosDetail(req, res, next) {
-    // Je vais aller cherche dans ma liste de promo celle
-    // possédant l'id correspondant à celui passé dans l'url
-    // const promoId = req.params.promoId;
-    // C'est identique à :
-    const { promoId } = req.params;
+  async promosDetail(req, res, next) {
+    const promoId = parseInt(req.params.promoId, 10);
 
-    // On va chercher dans notre liste de promos celle qui a l'id
-    // Les paramètres d'url sont toujours des chaînes de caractères
-    // L'id est censé être un nombre, je convertis donc en nombre mon paramètre
-    const promoFound = promos.find((promo) => promo.id === Number(promoId));
+    const promoByid = await client.query(`SELECT * FROM "promo" WHERE id = ${promoId};`);
 
-    if (promoFound) {
+    if (promoByid.rows.length > 0) {
       res.render('promos/detail', {
         // Je passe à ma vue l'information sur ma promo
-        promo: promoFound,
+        promo: promoByid.rows[0],
       });
     } else {
       // Si la promo n'est pas trouver, on appel le middleware suivant
