@@ -4,7 +4,7 @@ const { Client } = require('pg');
 // le client me permet d'envoyer des requêtes
 // le format de la chaine de connexion est le suivant :
 // postgresql://utilisateur:password@server/bdd
-const client = new Client('postgresql://trombi:trombi@localhost/trombi');
+const client = new Client(process.env.PG_URL);
 
 client.connect((error) => {
   if (error) {

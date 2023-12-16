@@ -9,5 +9,6 @@ router.get('/', mainController.home);
 router.get('/promos', promoController.promosList);
 router.get('/promos/:promoId', promoController.promosDetail);
 router.get('/promos/:id/students', studentController.studentsList);
+router.get('/promos/:id/students/:studentId', studentController.studentsDetail);
 
 module.exports = router;

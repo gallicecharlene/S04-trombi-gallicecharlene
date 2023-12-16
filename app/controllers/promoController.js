@@ -1,27 +1,27 @@
-// const promos = require('../../data/promos.json');
-const client = require('../dbClient');
+const datamapper = require('../models/datamapper');
 
 const promoController = {
-  // Index s'occupera d'afficher la liste des promos
-  async promosList(req, res) {
-    const promos = await client.query('SELECT * FROM "promo" ORDER BY name;');
+  async promosList(req, res, next) {
+    const promos = await datamapper.findAllPromo();
 
-    // On passe à notre vue les données json de notre fichier promos.json
-    res.render('promos/list', {
-      promos: promos.rows,
-    });
+    if (promos) {
+      res.render('promos/promos', {
+        promos,
+      });
+    } else {
+      next();
+    }
   },
 
   // Affiche le détail d'une promo...
   async promosDetail(req, res, next) {
-    const promoId = parseInt(req.params.promoId, 10);
+    const promoId = Number(req.params.promoId);
+    const promo = await datamapper.findPromoById(promoId);
 
-    const promoByid = await client.query(`SELECT * FROM "promo" WHERE id = ${promoId};`);
-
-    if (promoByid.rows.length > 0) {
-      res.render('promos/detail', {
+    if (promo) {
+      res.render('promos/promo', {
         // Je passe à ma vue l'information sur ma promo
-        promo: promoByid.rows[0],
+        promo,
       });
     } else {
       // Si la promo n'est pas trouver, on appel le middleware suivant

@@ -1,19 +1,34 @@
-// const students = require('../../data/students.json');
-// const promos = require('../../data/promos.json');
-const client = require('../dbClient');
+const datamapper = require('../models/datamapper');
 
 const studentController = {
 
   async studentsList(req, res, next) {
-    const id = parseInt(req.params.id, 10);
+    const id = Number(req.params.id);
 
-    const promoByid = await client.query(`SELECT * FROM "promo" WHERE id = ${id};`);
-    const studentsPromoFound = await client.query(`SELECT * FROM "student" WHERE promo_id = ${id};`);
+    const promoByid = await datamapper.findPromoById(id);
+    const studentsPromoFound = await datamapper.findStudentsByPromoId(id);
 
-    if (studentsPromoFound.rows.length > 0 && promoByid.rows.length > 0) {
-      res.render('students/studentsList', {
-        students: studentsPromoFound.rows,
-        promo: promoByid.rows[0],
+    if (studentsPromoFound && promoByid) {
+      res.render('students/students', {
+        students: studentsPromoFound,
+        promoByid,
+      });
+    } else {
+      next();
+    }
+  },
+
+  async studentsDetail(req, res, next) {
+    const promoId = Number(req.params.id);
+    const studentId = Number(req.params.studentId);
+
+    const promoByid = await datamapper.findPromoById(promoId);
+    const studentByid = await datamapper.findStudentById(studentId);
+
+    if (studentByid && promoByid) {
+      res.render('students/student', {
+        promoByid,
+        studentByid,
       });
     } else {
       next();
