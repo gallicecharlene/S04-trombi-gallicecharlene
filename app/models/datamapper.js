@@ -68,6 +68,23 @@ const datamapper = {
     // ou undefined si une erreur s'est produite
     return studentById?.rows[0];
   },
+
+  // Methode qui sert à inserer les données issus du paramètre (studentInfo) dans la BDD
+  // plus précisément ds mon tableau 'student'
+  async addStudent(studentInfo) {
+    let student;
+
+    try {
+      student = await client.query(`INSERT INTO "student"
+      (promo_id,first_name,last_name,github_username)
+      VALUES ($1, $2, $3, $4);`, [studentInfo.promo, studentInfo.first_name, studentInfo.last_name, studentInfo.github_username]);
+    } catch (error) {
+      // Gérer l'erreur en affichant un message dans la console
+      console.error(error);
+    }
+    return student;
+  },
+
 };
 
 // Exporte l'objet datamapper pour qu'il puisse être utilisé dans d'autres modules

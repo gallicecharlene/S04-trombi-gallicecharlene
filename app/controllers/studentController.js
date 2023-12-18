@@ -13,6 +13,7 @@ const studentController = {
     const promoByid = await datamapper.findPromoById(id);
     // et les étudiants de cette promotion
     const studentsPromoFound = await datamapper.findStudentsByPromoId(id);
+    // console.table(studentsPromoFound);
 
     // Vérifier si les données ont été trouvées dans la base de données
     if (studentsPromoFound && promoByid) {

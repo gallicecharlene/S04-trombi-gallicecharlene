@@ -21,8 +21,9 @@ router.get('/promos/:promoId', promoController.promosDetail); // Route pour les 
 router.get('/promos/:id/students', studentController.studentsList); // Route pour la liste des étudiants d'une promotion
 router.get('/promos/:id/students/:studentId', studentController.studentsDetail); // Route pour les détails d'un étudiant
 
-// Routes liée à l'ajout d'étudiants
-router.get('/admin/addStudent', adminController.addStudent);
+// Routes liée à l'adminitrateur
+router.get('/admin/addStudent', adminController.adminAddStudent); // Route pour l'ajout d'étudiants
+router.post('/admin/addStudent', adminController.formDataAddStudent); // Route pour la validation de l'ajout étudiant
 
 // Exporter le module router pour qu'il puisse être utilisé dans d'autres modules
 module.exports = router;

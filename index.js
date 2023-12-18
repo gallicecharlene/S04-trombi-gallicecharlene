@@ -16,9 +16,13 @@ const { PORT } = process.env;
 // Configurer le moteur de vue EJS et définir le répertoire des vues
 app.set('view engine', 'ejs');
 app.set('views', './app/views');
+///
 
 // Utiliser le dossier 'public' pour les fichiers statiques (CSS, JavaScript, images, etc.)
 app.use(express.static('public'));
+
+//  Utiliser le middleware pour extraire le contenu de la requête
+app.use(express.urlencoded({ extended: true }));
 
 // Utiliser le module de routage
 app.use(router);
